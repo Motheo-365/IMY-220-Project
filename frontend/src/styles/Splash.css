@@ -67,7 +67,6 @@ body {
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
 
     background: #0b1029;
 
@@ -81,10 +80,48 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
 
     gap: 40px;
 
     margin-bottom: 35px;
+}
+
+.auth-form-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: safe center;
+    min-height: 0;
+    overflow-y: auto;
+
+    padding-right: 5%;
+
+    scrollbar-color: #7656c7 #151a35;
+    scrollbar-width: thin;
+    scrollbar-gutter: stable both-edges;
+}
+
+.auth-form-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.auth-form-content::-webkit-scrollbar-track {
+    background: #151a35;
+}
+
+.auth-form-content::-webkit-scrollbar-thumb {
+    border: 2px solid #151a35;
+    border-radius: 8px;
+    background: #7656c7;
+}
+
+.auth-form-content::-webkit-scrollbar-thumb:hover {
+    background: #9870ff;
+}
+
+.auth-form-content > * {
+    flex-shrink: 0;
 }
 
 .auth-toggle a {
@@ -390,6 +427,11 @@ body {
         min-height: 600px;
 
         padding: 45px 30px;
+    }
+
+    .auth-form-content {
+        flex: none;
+        overflow-y: visible;
     }
 }
 
