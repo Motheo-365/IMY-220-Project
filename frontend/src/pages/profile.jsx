@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 
 import PostCard from "../components/postCard";
 import SiteHeader from "../components/siteHeader";
+import { users } from "../data/users";
 
 import { useSocial } from "../context/useSocial";
 
@@ -22,7 +23,15 @@ function Profile() {
     const isOwnProfile = viewedUsername === profile.username;
     const viewedProfile = isOwnProfile
         ? profile
-        : { ...profile, username: viewedUsername, name: viewedUsername };
+        : users.find((user) => user.username === viewedUsername) || {
+            username: viewedUsername,
+            name: viewedUsername,
+            profilePicture: "",
+            bio: "Astrea member.",
+            following: 0,
+            followers: "0",
+            likes: "0",
+        };
 
     const tabs = [
         { id: "grid", label: "Grid" },
@@ -87,7 +96,7 @@ function Profile() {
                                 />
                             ) : (
                                 <div className="profile-picture-placeholder">
-                                    M
+                                    {viewedProfile.name?.charAt(0).toUpperCase() || "?"}
                                 </div>
                             )}
                         </div>
@@ -95,17 +104,17 @@ function Profile() {
                         <div className="profile-stats">
 
                             <div className="profile-stat">
-                                <strong>{profile.following}</strong>
+                                <strong>{viewedProfile.following}</strong>
                                 <span>following</span>
                             </div>
 
                             <div className="profile-stat">
-                                <strong>{profile.followers}</strong>
+                                <strong>{viewedProfile.followers}</strong>
                                 <span>followers</span>
                             </div>
 
                             <div className="profile-stat">
-                                <strong>{profile.likes}</strong>
+                                <strong>{viewedProfile.likes}</strong>
                                 <span>likes</span>
                             </div>
 

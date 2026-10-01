@@ -1,12 +1,11 @@
 import { Link, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import {
     LikeIcon,
     CommentIcon,
     ReshareIcon,
     BookmarkIcon,
-    UserIcon,
 } from "../components/icon";
 
 import { comments } from "../data/comments";
@@ -15,7 +14,7 @@ import { useFollowing } from "../context/followingContext";
 import { useSocial } from "../context/useSocial";
 
 import ProfilePicture from "../components/profilePicture";
-import Navigation from "../components/navigation";
+import SiteHeader from "../components/siteHeader";
 
 import "../styles/post.css";
 
@@ -43,11 +42,22 @@ function Post() {
     );
     const [replyOpen, setReplyOpen] = useState(false);
     const [replyText, setReplyText] = useState("");
+    const [replyTarget, setReplyTarget] = useState(null);
+    const [likedCommentIds, setLikedCommentIds] = useState([]);
+    const commentsRef = useRef(null);
 
     const following = isFollowing(post?.username);
     const liked = post ? isLiked(post.id) : false;
     const reshared = post ? isReshared(post.id) : false;
     const bookmarked = post ? isBookmarked(post.id) : false;
+    const hasReplied = postComments.some(
+        (comment) => comment.postId === post?.id && comment.username === profile.username
+    );
+
+    function openReply(target = null) {
+        setReplyTarget(target);
+        setReplyOpen(true);
+    }
 
     function handleReplySubmit(event) {
         event.preventDefault();
@@ -60,20 +70,25 @@ function Post() {
             {
                 id: Date.now(),
                 postId: Number(postId),
-                username: "you",
-                handle: "@you",
+                replyTo: replyTarget?.id ?? null,
+                username: profile.username,
+                handle: `@${profile.username}`,
                 time: "now",
                 text,
             },
         ]);
         setReplyText("");
+        setReplyTarget(null);
         setReplyOpen(false);
     }
 
     if (!post) {
         return (
             <main className="post-page">
-                <h1>Post not found</h1>
+                <SiteHeader />
+                <div className="post-page-content">
+                    <h1>Post not found</h1>
+                </div>
             </main>
         );
     }
@@ -81,15 +96,19 @@ function Post() {
     if ((post.hidden || post.locked) && post.username !== profile.username) {
         return (
             <main className="post-page">
-                <h1>This post is hidden or locked.</h1>
-                <Link to="/home">Back to feed</Link>
+                <SiteHeader />
+                <div className="post-page-content">
+                    <h1>This post is hidden or locked.</h1>
+                    <Link to="/home">Back to feed</Link>
+                </div>
             </main>
         );
     }
 
     return (
         <main className="post-page">
-            <Navigation />
+            <SiteHeader />
+            <div className="post-page-content">
             {/* ====================== POST ====================== */}
             <section className="single-post">
                 <header className="single-post-header">
@@ -140,7 +159,11 @@ function Post() {
 
 
                 <div className="single-post-actions">
-                    <button type="button">
+                    <button
+                        type="button"
+                        aria-label="View comments"
+                        onClick={() => commentsRef.current?.scrollIntoView({ behavior: "smooth" })}
+                    >
                         <CommentIcon />
                         <span>{postComments.length}</span>
                     </button>
@@ -181,8 +204,9 @@ function Post() {
 
                     <button
                         type="button"
-                        className="reply-button"
-                        onClick={() => setReplyOpen(true)}
+                        className={`reply-button ${hasReplied ? "active" : ""}`}
+                        aria-pressed={hasReplied}
+                        onClick={() => openReply()}
                     >
                         Reply...
                     </button>
@@ -198,21 +222,28 @@ function Post() {
 
 
             {/* ====================== COMMENTS ====================== */}
-            <section className="comments">
+            <section className="comments" ref={commentsRef}>
                 {postComments.map((comment) => (
                     <article
                         className="comment"
                         key={comment.id}
                     >
-                        <div className="comment-avatar">
-                            <UserIcon />
-                        </div>
+                        <Link
+                            to={`/profile/${encodeURIComponent(comment.username)}`}
+                            className="comment-avatar-link"
+                            aria-label={`View ${comment.username}'s profile`}
+                        >
+                            <ProfilePicture
+                                username={comment.username}
+                                className="comment-avatar"
+                            />
+                        </Link>
 
                         <div className="comment-content">
                             <div className="comment-user">
-                                <strong>
-                                    {comment.username}
-                                </strong>
+                                <Link to={`/profile/${encodeURIComponent(comment.username)}`}>
+                                    <strong>{comment.username}</strong>
+                                </Link>
 
                                 <span>
                                     {comment.handle} •{" "}
@@ -223,14 +254,32 @@ function Post() {
                             <p>
                                 {comment.text}
                             </p>
+                            {comment.replyTo && (
+                                <span className="comment-reply-target">
+                                    Replying to @{postComments.find((parent) => parent.id === comment.replyTo)?.username || post.username}
+                                </span>
+                            )}
                         </div>
 
                         <div className="comment-actions">
-                            <button type="button">
+                            <button
+                                type="button"
+                                onClick={() => openReply(comment)}
+                            >
                                 Reply
                             </button>
 
-                            <button type="button">
+                            <button
+                                type="button"
+                                className={likedCommentIds.includes(comment.id) ? "active" : ""}
+                                aria-label={likedCommentIds.includes(comment.id) ? "Unlike comment" : "Like comment"}
+                                aria-pressed={likedCommentIds.includes(comment.id)}
+                                onClick={() => setLikedCommentIds((current) =>
+                                    current.includes(comment.id)
+                                        ? current.filter((id) => id !== comment.id)
+                                        : [...current, comment.id]
+                                )}
+                            >
                                 <LikeIcon />
                             </button>
                         </div>
@@ -261,7 +310,9 @@ function Post() {
                             </button>
                         </div>
                         <p className="reply-context">
-                            Replying to @{post.username}
+                            {replyTarget
+                                ? `Replying to @${replyTarget.username}`
+                                : `Replying to @${post.username}`}
                         </p>
                         <form onSubmit={handleReplySubmit}>
                             <textarea
@@ -282,6 +333,7 @@ function Post() {
                     </section>
                 </div>
             )}
+            </div>
         </main>
     );
 }

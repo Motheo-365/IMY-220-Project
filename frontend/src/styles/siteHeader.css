@@ -1,5 +1,8 @@
 .site-header {
     display: grid;
+    position: sticky;
+    top: 0;
+    z-index: 10;
     grid-template-columns: minmax(100px, 1fr) auto minmax(100px, 1fr);
     align-items: center;
     gap: 16px;
