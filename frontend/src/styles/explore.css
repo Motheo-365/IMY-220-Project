@@ -5,58 +5,8 @@
 
     width: 100%;
 
-    background: var(--color-page-deep);
+    background: var(--background-night-sky);
     color: var(--color-text);
-}
-
-
-/* ====================== HEADER ====================== */
-
-.explore-header {
-    width: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 28px clamp(24px, 5vw, 60px) 10px;
-
-    box-sizing: border-box;
-}
-
-.explore-header h1 {
-    margin: 0;
-
-    font-size: clamp(32px, 3vw, 42px);
-    font-weight: 300;
-
-    letter-spacing: 2px;
-}
-
-
-/* ====================== NOTIFICATIONS ====================== */
-
-.explore-header .notification-button {
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    border: none;
-    background: transparent;
-
-    color: var(--color-text);
-
-    cursor: pointer;
-}
-
-.explore-header .notification-button svg {
-    width: 30px;
-    height: 30px;
 }
 
 
@@ -140,7 +90,7 @@
 
     box-sizing: border-box;
 
-    background: var(--color-page-deep);
+    background: var(--color-page);
 }
 
 .explore-grid-item img {
@@ -274,10 +224,6 @@
 /* ====================== TABLET ====================== */
 
 @media (max-width: 768px) {
-    .explore-header {
-        padding: 24px 24px 10px;
-    }
-
     .explore-content {
         padding: 0 20px;
     }
@@ -299,24 +245,6 @@
 /* ====================== MOBILE ====================== */
 
 @media (max-width: 600px) {
-    .explore-header {
-        padding: 20px 20px 8px;
-    }
-
-    .explore-header h1 {
-        font-size: 32px;
-    }
-
-    .explore-header .notification-button {
-        width: 36px;
-        height: 36px;
-    }
-
-    .explore-header .notification-button svg {
-        width: 27px;
-        height: 27px;
-    }
-
     .explore-content {
         padding: 0 14px;
     }

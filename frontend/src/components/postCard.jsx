@@ -25,7 +25,9 @@ function PostCard({ post }) {
         togglePostVisibility,
         deletePost,
     } = useSocial();
+
     const liked = isLiked(post.id);
+    const commented = post.comments > 0;
     const bookmarked = isBookmarked(post.id);
     const reshared = isReshared(post.id);
     const isOwner = post.username === profile.username;
@@ -117,7 +119,9 @@ function PostCard({ post }) {
 
                 <Link
                     to={`/post/${post.id}`}
-                    className="comment-button"
+                    className={`comment-button ${
+                        commented ? "active" : ""
+                    }`}
                     aria-label="View comments"
                 >
                     <CommentIcon />

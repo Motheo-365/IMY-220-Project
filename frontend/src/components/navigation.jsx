@@ -70,9 +70,12 @@ function Navigation() {
                     Explore
                 </Link>
 
-                <Link to="/post/create" className="create-post-link">
+                <Link
+                    to="/create"
+                    className={`create-post-link ${location.pathname === "/create" ? "active" : ""}`}
+                >
                     <PlusIcon />
-                    <span>Create</span>
+                    <span>&nbsp; Create</span>
                 </Link>
             </div>
         </nav>

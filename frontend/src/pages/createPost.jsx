@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import Navigation from "../components/navigation";
+import SiteHeader from "../components/siteHeader";
 import { useSocial } from "../context/useSocial";
 
 import "../styles/account.css";
@@ -28,7 +28,8 @@ function CreatePost() {
 
     return (
         <div className="account-page">
-            <Navigation />
+            <SiteHeader />
+
             <main className="account-content">
                 <header className="account-page-header">
                     <p>SHARE A MOMENT</p>
@@ -62,16 +63,29 @@ function CreatePost() {
                             placeholder="What would you like to share?"
                             required
                         />
-                        <span className="field-counter">{caption.length}/280</span>
+                        <span className="field-counter">
+                            {caption.length}/280
+                        </span>
                     </label>
 
-                    {error && <p className="account-error" role="alert">{error}</p>}
+                    {error && (
+                        <p className="account-error" role="alert">
+                            {error}
+                        </p>
+                    )}
 
                     <div className="account-form-actions">
-                        <Link to="/profile" className="account-secondary-button">
+                        <Link
+                            to="/profile"
+                            className="account-secondary-button"
+                        >
                             Cancel
                         </Link>
-                        <button type="submit" className="account-primary-button">
+
+                        <button
+                            type="submit"
+                            className="account-primary-button"
+                        >
                             Publish post
                         </button>
                     </div>

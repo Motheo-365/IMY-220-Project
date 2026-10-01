@@ -1,6 +1,5 @@
-import Navigation from "../components/navigation";
 import PostCard from "../components/postCard";
-import { NotificationIcon } from "../components/icon";
+import SiteHeader from "../components/siteHeader";
 
 import { useFollowing } from "../context/followingContext";
 import { useSocial } from "../context/useSocial";
@@ -17,18 +16,7 @@ function Following() {
 
     return (
         <main className="home">
-            <header className="home-header">
-                <h1>astrea</h1>
-
-                <button
-                    className="notification-button"
-                    type="button"
-                >
-                    <NotificationIcon />
-                </button>
-            </header>
-
-            <Navigation />
+            <SiteHeader />
 
             <section className="feed">
                 {followingPosts.length > 0 ? (

@@ -3,7 +3,7 @@
     width: 100%;
     min-height: 100vh;
 
-    background: var(--color-page);
+    background: var(--background-night-sky);
     color: var(--color-text);
 
     font-family: var(--font-body);

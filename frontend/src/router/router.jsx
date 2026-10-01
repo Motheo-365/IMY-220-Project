@@ -26,7 +26,7 @@ export default function Router() {
                         <Route path="/profile" element={<Profile />} />
                         <Route path="/profile/:username" element={<Profile />} />
                         <Route path="/profile/edit" element={<EditProfile />} />
-                        <Route path="/post/create" element={<CreatePost />} />
+                        <Route path="/create" element={<CreatePost />} />
                         <Route path="/home" element={<Home />} />
                         <Route path="/following" element={<Following />} />
                         <Route path="/explore" element={<Explore />} />

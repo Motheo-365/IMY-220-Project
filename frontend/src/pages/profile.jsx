@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import PostCard from "../components/postCard";
-import Navigation from "../components/navigation";
+import SiteHeader from "../components/siteHeader";
 
 import { useSocial } from "../context/useSocial";
 
@@ -71,7 +71,7 @@ function Profile() {
 
     return (
         <div className="profile-page">
-            <Navigation />
+            <SiteHeader />
 
             <main className="profile-content">
 
@@ -125,7 +125,7 @@ function Profile() {
                             <Link to="/profile/edit" className="profile-button">
                                 Edit Profile
                             </Link>
-                            <Link to="/post/create" className="profile-button">
+                            <Link to="/create" className="profile-button">
                                 Create Post
                             </Link>
                         </div>

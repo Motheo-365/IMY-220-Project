@@ -1,9 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-import Navigation from "../components/navigation";
+import SiteHeader from "../components/siteHeader";
 import {
-    NotificationIcon,
     SearchIcon,
     UserIcon,
 } from "../components/icon";
@@ -36,22 +35,7 @@ function Explore() {
 
     return (
         <main className="explore-page">
-            {/* ====================== HEADER ====================== */}
-            <header className="explore-header">
-                <h1>astrea</h1>
-
-                <button
-                    className="notification-button"
-                    type="button"
-                    aria-label="Notifications"
-                >
-                    <NotificationIcon />
-                </button>
-            </header>
-
-            {/* ====================== NAVIGATION ====================== */}
-
-            <Navigation />
+            <SiteHeader />
 
             {/* ====================== SEARCH ====================== */}
             <section className="explore-content">

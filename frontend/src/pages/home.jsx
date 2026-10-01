@@ -1,6 +1,5 @@
-import Navigation from "../components/navigation";
 import PostCard from "../components/postCard";
-import { NotificationIcon } from "../components/icon";
+import SiteHeader from "../components/siteHeader";
 
 import { useSocial } from "../context/useSocial";
 
@@ -12,17 +11,7 @@ function Home() {
 
     return (
         <main className="home">
-            <header className="home-header">
-                <h1>astrea</h1>
-
-                <Navigation />
-                <button
-                    className="notification-button"
-                    type="button"
-                >
-                    <NotificationIcon />
-                </button>
-            </header>
+            <SiteHeader />
 
             <section className="feed">
                 {publicPosts.map((post) => (
