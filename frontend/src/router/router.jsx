@@ -8,24 +8,32 @@ import Following from "../pages/following";
 import Explore from "../pages/explore";
 import Post from "../pages/post";
 import NotFound from "../pages/notFound";
+import EditProfile from "../pages/editProfile";
+import CreatePost from "../pages/createPost";
 
 import { FollowingProvider } from "../context/followingContext";
+import { SocialProvider } from "../context/socialContext";
 
 export default function Router() {
     return (
         <BrowserRouter>
             <FollowingProvider>
-                <Routes>
-                    <Route path="/" element={<Login />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Signup />}/>
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/home" element={<Home />} />
-                    <Route path="/following" element={<Following />} />
-                    <Route path="/explore" element={<Explore />} />
-                    <Route path="/post/:postId" element={<Post />}/>
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
+                <SocialProvider>
+                    <Routes>
+                        <Route path="/" element={<Login />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/signup" element={<Signup />}/>
+                        <Route path="/profile" element={<Profile />} />
+                        <Route path="/profile/:username" element={<Profile />} />
+                        <Route path="/profile/edit" element={<EditProfile />} />
+                        <Route path="/post/create" element={<CreatePost />} />
+                        <Route path="/home" element={<Home />} />
+                        <Route path="/following" element={<Following />} />
+                        <Route path="/explore" element={<Explore />} />
+                        <Route path="/post/:postId" element={<Post />}/>
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </SocialProvider>
             </FollowingProvider>
         </BrowserRouter>
     );

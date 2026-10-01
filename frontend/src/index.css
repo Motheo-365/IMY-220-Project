@@ -1,51 +1,108 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  color-scheme: dark;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --color-page: #0b1029;
+  --color-page-deep: #080d27;
+  --color-page-profile: #0f1117;
+  --color-surface: #141a35;
+  --color-surface-input: #111832;
+  --color-surface-auth: #151a35;
+  --color-surface-profile: #171a22;
+  --color-surface-profile-raised: #20232d;
 
-  font: 18px/145% var(--sans);
+  --color-text: #ffffff;
+  --color-text-soft: #e8eaf2;
+  --color-text-muted: #b8bbca;
+  --color-text-dim: #777b91;
+  --color-text-profile: #f5f5f5;
+  --color-border: #44485c;
+  --color-border-control: #454c61;
+  --color-border-light: #e5e5e5;
+  --color-border-subtle: #292c35;
+
+  --color-accent: #149df2;
+  --color-accent-soft: #69c7e5;
+  --color-accent-header: #ca0fcd;
+  --color-accent-auth: #9870ff;
+  --color-accent-auth-hover: #692dff;
+  --color-danger: #ff9aa5;
+  --color-danger-strong: #ff6b81;
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-ink: #222222;
+  --color-ink-strong: #111111;
+  --color-search-surface: #d8d8d8;
+  --color-search-text: #626262;
+  --color-search-muted: #666666;
+  --color-search-detail: #333333;
+  --color-search-empty: #555555;
+  --color-button-muted: #85889a;
+  --color-placeholder: #999999;
+  --color-success-surface: rgba(255, 255, 255, 0.12);
+  --color-hover-surface: rgba(255, 255, 255, 0.1);
+  --color-inset-surface: rgba(0, 0, 0, 0.06);
+  --color-danger-surface: rgba(255, 107, 129, 0.16);
+  --color-overlay: rgba(0, 0, 0, 0.68);
+
+  --font-body: "Manrope", "Segoe UI", sans-serif;
+  --font-heading: "Manrope", "Segoe UI", sans-serif;
+  --font-auth: Arial, Helvetica, sans-serif;
+  --font-mono: ui-monospace, Consolas, monospace;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  --radius-small: 4px;
+  --radius-control: 7px;
+  --radius-card: 8px;
+  --radius-grid: 10px;
+  --radius-panel: 12px;
+  --radius-pill: 50%;
+
+  --shadow-popover: 0 12px 32px rgba(0, 0, 0, 0.38);
+  --shadow-dialog: 0 18px 60px rgba(0, 0, 0, 0.4);
+  --motion-fast: 0.15s ease;
+  --motion-standard: 0.2s ease;
+  --motion-image: 0.25s ease;
+  --motion-input: 0.2s ease-in-out;
+
+  font: 18px/145% var(--font-body);
   letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
+  color: var(--color-text);
+  background: var(--color-page);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-width: 320px;
+  background: var(--color-page);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+@media (max-width: 1024px) {
+  :root {
+    font-size: 16px;
   }
 }

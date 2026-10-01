@@ -2,17 +2,17 @@ import Navigation from "../components/navigation";
 import PostCard from "../components/postCard";
 import { NotificationIcon } from "../components/icon";
 
-import { posts } from "../data/posts";
-
 import { useFollowing } from "../context/followingContext";
+import { useSocial } from "../context/useSocial";
 
 import "../styles/home.css";
 
 function Following() {
     const { following } = useFollowing();
+    const { posts } = useSocial();
 
     const followingPosts = posts.filter((post) =>
-        following.includes(post.username)
+        following.includes(post.username) && !post.hidden && !post.locked
     );
 
     return (

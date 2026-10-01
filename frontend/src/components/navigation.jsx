@@ -1,6 +1,8 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import ProfilePicture from "./profilePicture";
+import { PlusIcon } from "./icon";
+import { useSocial } from "../context/useSocial";
 
 import "../styles/navigation.css";
 
@@ -8,11 +10,11 @@ function Navigation() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const currentUsername = "motheom";
+    const { profile } = useSocial();
+    const currentUsername = profile.username;
 
     return (
         <nav className="feed-navigation">
-
             {/* Back button */}
             <button
                 className="back-button"
@@ -60,15 +62,19 @@ function Navigation() {
                 <Link
                     to="/explore"
                     className={
-                        location.pathname === "/explore"
+                        location.pathname === "/explore" || location.pathname.startsWith("/post/")
                             ? "active"
                             : ""
                     }
                 >
                     Explore
                 </Link>
-            </div>
 
+                <Link to="/post/create" className="create-post-link">
+                    <PlusIcon />
+                    <span>Create</span>
+                </Link>
+            </div>
         </nav>
     );
 }

@@ -5,8 +5,8 @@
 
     width: 100%;
 
-    background: #080d27;
-    color: #ffffff;
+    background: var(--color-page-deep);
+    color: var(--color-text);
 }
 
 
@@ -49,7 +49,7 @@
     border: none;
     background: transparent;
 
-    color: #ffffff;
+    color: var(--color-text);
 
     cursor: pointer;
 }
@@ -82,9 +82,9 @@
     gap: 8px;
     padding: 1.5%;
     box-sizing: border-box;
-    background: #ffffff;
-    border-radius: 8px;
-    color: #626262;
+    background: var(--color-white);
+    border-radius: var(--radius-card);
+    color: var(--color-search-text);
 }
 
 .explore-search svg {
@@ -101,14 +101,14 @@
 
     background: transparent;
 
-    color: #222222;
+    color: var(--color-ink);
 
     font-family: inherit;
     font-size: 14px;
 }
 
 .explore-search input::placeholder {
-    color: #666666;
+    color: var(--color-search-muted);
 }
 
 
@@ -135,12 +135,12 @@
 
     overflow: hidden;
 
-    border: 1px solid #ffffff;
-    border-radius: 10px;
+    border: 1px solid var(--color-white);
+    border-radius: var(--radius-grid);
 
     box-sizing: border-box;
 
-    background: #080d27;
+    background: var(--color-page-deep);
 }
 
 .explore-grid-item img {
@@ -151,7 +151,7 @@
 
     object-fit: cover;
 
-    transition: transform 0.25s ease;
+    transition: transform var(--motion-image);
 }
 
 .explore-grid-item:hover img {
@@ -167,8 +167,8 @@
     margin-left: -14px;
     padding: 8px 14px;
     box-sizing: border-box;
-    color: #111111;
-    border-radius: 8px;
+    color: var(--color-ink-strong);
+    border-radius: var(--radius-card);
 }
 
 
@@ -180,10 +180,10 @@
     align-items: center;
     gap: 12px;
     padding: 0.8%;
-    background: #d8d8d8;
-    color: #111111;
+    background: var(--color-search-surface);
+    color: var(--color-ink-strong);
     text-decoration: none;
-    border-radius: 8px;
+    border-radius: var(--radius-card);
 }
 
 .explore-user:hover {
@@ -203,10 +203,10 @@
     align-items: center;
     justify-content: center;
 
-    border: 1.5px solid #ffffff;
-    border-radius: 50%;
+    border: 1.5px solid var(--color-white);
+    border-radius: var(--radius-pill);
 
-    color: #ffffff;
+    color: var(--color-text);
 
     box-sizing: border-box;
 }
@@ -241,7 +241,7 @@
 .explore-user-info span {
     font-size: 9px;
 
-    color: #333333;
+    color: var(--color-search-detail);
 
     line-height: 1.1;
 }
@@ -267,7 +267,7 @@
 
     font-size: 12px;
 
-    color: #555555;
+    color: var(--color-search-empty);
 }
 
 
@@ -331,7 +331,7 @@
     }
 
     .explore-grid-item {
-        border-radius: 8px;
+        border-radius: var(--radius-card);
     }
 
     .explore-results {

@@ -8,12 +8,14 @@ import {
     UserIcon,
 } from "../components/icon";
 
-import { posts } from "../data/posts";
+import { useSocial } from "../context/useSocial";
 
 import "../styles/explore.css";
 
 function Explore() {
     const [search, setSearch] = useState("");
+    const { posts } = useSocial();
+    const publicPosts = posts.filter((post) => !post.hidden && !post.locked);
 
     /*
      * Get unique usernames from the posts.
@@ -22,7 +24,7 @@ function Explore() {
      */
     const users = [
         ...new Set(
-            posts.map((post) => post.username)
+            publicPosts.map((post) => post.username)
         ),
     ];
 
@@ -88,7 +90,7 @@ function Explore() {
 
                                         <span>
                                             Astrea user •{" "}
-                                            {posts.filter(
+                                            {publicPosts.filter(
                                                 (post) =>
                                                     post.username === username
                                             ).length}{" "}
@@ -112,7 +114,7 @@ function Explore() {
                 ) : (
                     /* ====================== POST GRID ====================== */
                     <section className="explore-grid">
-                        {posts.map((post) => (
+                        {publicPosts.map((post) => (
                             <Link
                                 to={`/post/${post.id}`}
                                 className="explore-grid-item"

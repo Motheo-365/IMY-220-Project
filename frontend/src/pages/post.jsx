@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
 
 import {
@@ -6,13 +6,16 @@ import {
     CommentIcon,
     ReshareIcon,
     BookmarkIcon,
+    UserIcon,
 } from "../components/icon";
 
-import { posts } from "../data/posts";
 import { comments } from "../data/comments";
 
 import { useFollowing } from "../context/followingContext";
+import { useSocial } from "../context/useSocial";
+
 import ProfilePicture from "../components/profilePicture";
+import Navigation from "../components/navigation";
 
 import "../styles/post.css";
 
@@ -20,19 +23,52 @@ import "../styles/post.css";
 function Post() {
     const { postId } = useParams();
     const { isFollowing, toggleFollow } = useFollowing();
+    const {
+        posts,
+        profile,
+        isLiked,
+        isReshared,
+        isBookmarked,
+        toggleLike,
+        toggleReshare,
+        toggleBookmark,
+    } = useSocial();
 
     const post = posts.find(
         (post) => post.id === Number(postId)
     );
 
-    const postComments = comments.filter(
-        (comment) => comment.postId === Number(postId)
+    const [postComments, setPostComments] = useState(() =>
+        comments.filter((comment) => comment.postId === Number(postId))
     );
+    const [replyOpen, setReplyOpen] = useState(false);
+    const [replyText, setReplyText] = useState("");
 
-    const following = isFollowing(post.username)
-    const [liked, setLiked] = useState(false);
-    const [reshared, setReshared] = useState(false);
-    const [bookmarked, setBookmarked] = useState(false);
+    const following = isFollowing(post?.username);
+    const liked = post ? isLiked(post.id) : false;
+    const reshared = post ? isReshared(post.id) : false;
+    const bookmarked = post ? isBookmarked(post.id) : false;
+
+    function handleReplySubmit(event) {
+        event.preventDefault();
+
+        const text = replyText.trim();
+        if (!text) return;
+
+        setPostComments((currentComments) => [
+            ...currentComments,
+            {
+                id: Date.now(),
+                postId: Number(postId),
+                username: "you",
+                handle: "@you",
+                time: "now",
+                text,
+            },
+        ]);
+        setReplyText("");
+        setReplyOpen(false);
+    }
 
     if (!post) {
         return (
@@ -42,8 +78,18 @@ function Post() {
         );
     }
 
+    if ((post.hidden || post.locked) && post.username !== profile.username) {
+        return (
+            <main className="post-page">
+                <h1>This post is hidden or locked.</h1>
+                <Link to="/home">Back to feed</Link>
+            </main>
+        );
+    }
+
     return (
         <main className="post-page">
+            <Navigation />
             {/* ====================== POST ====================== */}
             <section className="single-post">
                 <header className="single-post-header">
@@ -101,10 +147,10 @@ function Post() {
 
                     <button
                         type="button"
+                        aria-label={reshared ? "Remove reshare" : "Reshare post"}
+                        aria-pressed={reshared}
                         className={reshared ? "active" : ""}
-                        onClick={() =>
-                            setReshared(!reshared)
-                        }
+                        onClick={() => toggleReshare(post.id)}
                     >
                         <ReshareIcon />
                         <span>2</span>
@@ -112,10 +158,10 @@ function Post() {
 
                     <button
                         type="button"
+                        aria-label={liked ? "Unlike post" : "Like post"}
+                        aria-pressed={liked}
                         className={liked ? "active" : ""}
-                        onClick={() =>
-                            setLiked(!liked)
-                        }
+                        onClick={() => toggleLike(post.id)}
                     >
                         <LikeIcon />
                         <span>{post.likes}</span>
@@ -123,12 +169,12 @@ function Post() {
 
                     <button
                         type="button"
+                        aria-label={bookmarked ? "Remove bookmark" : "Bookmark post"}
+                        aria-pressed={bookmarked}
                         className={
                             bookmarked ? "active" : ""
                         }
-                        onClick={() =>
-                            setBookmarked(!bookmarked)
-                        }
+                        onClick={() => toggleBookmark(post.id)}
                     >
                         <BookmarkIcon />
                     </button>
@@ -136,6 +182,7 @@ function Post() {
                     <button
                         type="button"
                         className="reply-button"
+                        onClick={() => setReplyOpen(true)}
                     >
                         Reply...
                     </button>
@@ -190,6 +237,51 @@ function Post() {
                     </article>
                 ))}
             </section>
+
+            {replyOpen && (
+                <div
+                    className="reply-backdrop"
+                    onClick={() => setReplyOpen(false)}
+                >
+                    <section
+                        className="reply-dialog"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="reply-dialog-title"
+                        onClick={(event) => event.stopPropagation()}
+                    >
+                        <div className="reply-dialog-header">
+                            <h2 id="reply-dialog-title">Reply to post</h2>
+                            <button
+                                type="button"
+                                aria-label="Close reply form"
+                                onClick={() => setReplyOpen(false)}
+                            >
+                                &times;
+                            </button>
+                        </div>
+                        <p className="reply-context">
+                            Replying to @{post.username}
+                        </p>
+                        <form onSubmit={handleReplySubmit}>
+                            <textarea
+                                autoFocus
+                                aria-label="Your reply"
+                                placeholder="Write a reply..."
+                                maxLength={500}
+                                value={replyText}
+                                onChange={(event) => setReplyText(event.target.value)}
+                            />
+                            <div className="reply-dialog-footer">
+                                <span>{replyText.length}/500</span>
+                                <button type="submit" disabled={!replyText.trim()}>
+                                    Reply
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+            )}
         </main>
     );
 }

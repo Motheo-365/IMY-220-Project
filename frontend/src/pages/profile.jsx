@@ -1,63 +1,73 @@
 import { useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 import PostCard from "../components/postCard";
 import Navigation from "../components/navigation";
 
-import { posts } from "../data/posts";
+import { useSocial } from "../context/useSocial";
 
 import "../styles/profile.css";
 
 function Profile() {
     const [activeTab, setActiveTab] = useState("grid");
-
-    const profile = {
-        username: "motheom",
-        name: "Motheo Morena",
-        profilePicture:
-            "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=600&q=90",
-        following: 600,
-        followers: "23.3k",
-        likes: "800k",
-        bio: "Exploring the world, one postcard at a time.",
-    };
+    const { username } = useParams();
+    const {
+        profile,
+        posts,
+        likedPostIds,
+        bookmarkedPostIds,
+        resharedPostIds,
+    } = useSocial();
+    const viewedUsername = username || profile.username;
+    const isOwnProfile = viewedUsername === profile.username;
+    const viewedProfile = isOwnProfile
+        ? profile
+        : { ...profile, username: viewedUsername, name: viewedUsername };
 
     const tabs = [
         { id: "grid", label: "Grid" },
-        { id: "hidden", label: "Hidden / Locked" },
-        { id: "reshared", label: "Reshared" },
-        { id: "liked", label: "Liked" },
+        ...(isOwnProfile
+            ? [
+                { id: "hidden", label: "Hidden / Locked" },
+                { id: "reshared", label: "Reshared" },
+                { id: "liked", label: "Liked" },
+                { id: "bookmarked", label: "Saved" },
+            ]
+            : []),
     ];
-
-    const currentUsername = profile.username;
 
     function getPosts() {
         switch (activeTab) {
             case "hidden":
                 return posts.filter(
                     (post) =>
-                        post.username === currentUsername &&
-                        post.hidden
+                        isOwnProfile &&
+                        post.username === viewedUsername &&
+                        (post.hidden || post.locked)
                 );
 
             case "reshared":
                 return posts.filter(
-                    (post) =>
-                        post.username === currentUsername &&
-                        post.reshared
+                    (post) => resharedPostIds.includes(post.id) && !post.hidden && !post.locked
                 );
 
             case "liked":
-                return posts.filter(
-                    (post) => post.liked
-                );
+                return posts.filter((post) => likedPostIds.includes(post.id) && !post.hidden && !post.locked);
+
+            case "bookmarked":
+                return posts.filter((post) => bookmarkedPostIds.includes(post.id) && !post.hidden && !post.locked);
 
             case "grid":
             default:
                 return posts.filter(
-                    (post) => post.username === currentUsername
+                    (post) =>
+                        post.username === viewedUsername &&
+                        (activeTab !== "grid" || (!post.hidden && !post.locked))
                 );
         }
     }
+
+    const visiblePosts = getPosts();
 
     return (
         <div className="profile-page">
@@ -69,11 +79,11 @@ function Profile() {
                 <section className="profile-header">
 
                     <div className="profile-top">
-                        <div className="profile-picture">
-                            {profile.profilePicture ? (
+                            <div className="profile-picture">
+                                {viewedProfile.profilePicture ? (
                                 <img
-                                    src={profile.profilePicture}
-                                    alt={profile.name}
+                                    src={viewedProfile.profilePicture}
+                                    alt={viewedProfile.name}
                                 />
                             ) : (
                                 <div className="profile-picture-placeholder">
@@ -104,21 +114,22 @@ function Profile() {
 
                     {/* Bio */}
                     <div className="profile-bio">
-                        <h1>{profile.name}</h1>
-                        <p>@{profile.username}</p>
-                        <span>{profile.bio}</span>
+                        <h1>{viewedProfile.name}</h1>
+                        <p>@{viewedProfile.username}</p>
+                        <span>{viewedProfile.bio}</span>
                     </div>
 
                     {/* Actions */}
-                    <div className="profile-actions">
-                        <button className="profile-button">
-                            Edit Profile
-                        </button>
-
-                        <button className="profile-button">
-                            View Archive
-                        </button>
-                    </div>
+                    {isOwnProfile && (
+                        <div className="profile-actions">
+                            <Link to="/profile/edit" className="profile-button">
+                                Edit Profile
+                            </Link>
+                            <Link to="/post/create" className="profile-button">
+                                Create Post
+                            </Link>
+                        </div>
+                    )}
 
                 </section>
 
@@ -141,12 +152,17 @@ function Profile() {
 
                 {/* Post Grid */}
                 <section className="profile-post-grid">
-                    {getPosts().map((post) => (
+                    {visiblePosts.map((post) => (
                         <PostCard
                             key={post.id}
                             post={post}
                         />
                     ))}
+                    {visiblePosts.length === 0 && (
+                        <p className="profile-empty-state">
+                            {activeTab === "grid" ? "No posts yet." : "Nothing here yet."}
+                        </p>
+                    )}
                 </section>
 
             </main>

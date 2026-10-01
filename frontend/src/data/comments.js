@@ -1,6 +1,7 @@
 export const comments = [
     {
         id: 1,
+        postId: 1,
         username: "mmellow",
         handle: "@mmellow",
         time: "1h",
@@ -8,6 +9,7 @@ export const comments = [
     },
     {
         id: 2,
+        postId: 1,
         username: "gurlahh",
         handle: "@gurlahh",
         time: "33m",
@@ -15,6 +17,7 @@ export const comments = [
     },
     {
         id: 3,
+        postId: 1,
         username: "gurlahh",
         handle: "@gurlahh",
         time: "33m",
@@ -22,6 +25,7 @@ export const comments = [
     },
     {
         id: 4,
+        postId: 1,
         username: "gurlahh",
         handle: "@gurlahh",
         time: "33m",
@@ -29,6 +33,7 @@ export const comments = [
     },
     {
         id: 5,
+        postId: 1,
         username: "gurlahh",
         handle: "@gurlahh",
         time: "33m",

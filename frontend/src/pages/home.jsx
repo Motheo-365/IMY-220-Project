@@ -2,16 +2,20 @@ import Navigation from "../components/navigation";
 import PostCard from "../components/postCard";
 import { NotificationIcon } from "../components/icon";
 
-import { posts } from "../data/posts";
+import { useSocial } from "../context/useSocial";
 
 import "../styles/home.css";
 
 function Home() {
+    const { posts } = useSocial();
+    const publicPosts = posts.filter((post) => !post.hidden && !post.locked);
+
     return (
         <main className="home">
             <header className="home-header">
                 <h1>astrea</h1>
 
+                <Navigation />
                 <button
                     className="notification-button"
                     type="button"
@@ -20,10 +24,8 @@ function Home() {
                 </button>
             </header>
 
-            <Navigation />
-
             <section className="feed">
-                {posts.map((post) => (
+                {publicPosts.map((post) => (
                     <PostCard
                         key={post.id}
                         post={post}

@@ -25,7 +25,7 @@
 
     padding: 0;
 
-    color: #ffffff;
+    color: var(--color-text);
 
     font-family: inherit;
     font-size: 24px;
@@ -35,7 +35,7 @@
 
     cursor: pointer;
 
-    transition: opacity 0.2s ease;
+    transition: opacity var(--motion-standard);
 }
 
 .back-button:hover {
@@ -55,12 +55,12 @@
 
     flex-shrink: 0;
 
-    border: 2px solid #ffffff;
-    border-radius: 50%;
+    border: 2px solid var(--color-white);
+    border-radius: var(--radius-pill);
 
     box-sizing: border-box;
 
-    transition: opacity 0.2s ease;
+    transition: opacity var(--motion-standard);
 }
 
 .feed-navigation .profile-link:hover {
@@ -71,7 +71,7 @@
     width: 100%;
     height: 100%;
 
-    border-radius: 50%;
+    border-radius: var(--radius-pill);
 
     object-fit: cover;
 
@@ -94,7 +94,7 @@
     display: flex;
     align-items: center;
 
-    color: #ffffff;
+    color: var(--color-text);
 
     font-size: clamp(13px, 1.1vw, 16px);
     font-weight: 400;
@@ -103,11 +103,23 @@
 
     text-decoration: none;
 
-    transition: opacity 0.2s ease;
+    transition: opacity var(--motion-standard);
 }
 
 .navigation-links a:hover {
     opacity: 0.7;
+}
+
+.navigation-links .create-post-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+}
+
+.create-post-link svg {
+    width: 17px;
+    height: 17px;
 }
 
 .navigation-links a.active::after {
@@ -121,7 +133,7 @@
 
     height: 1.5px;
 
-    background: #ffffff;
+    background: var(--color-white);
 }
 
 

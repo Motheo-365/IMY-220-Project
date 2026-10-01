@@ -8,19 +8,86 @@ import {
     CommentIcon,
     ReshareIcon,
     BookmarkIcon,
+    MoreIcon,
 } from "./icon";
+import { useSocial } from "../context/useSocial";
 
 function PostCard({ post }) {
-    const [liked, setLiked] = useState(false);
-    const [commented, setCommented] = useState(false);
-    const [reshared, setReshared] = useState(false);
-    const [bookmarked, setBookmarked] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const {
+        profile,
+        isLiked,
+        isBookmarked,
+        isReshared,
+        toggleLike,
+        toggleBookmark,
+        toggleReshare,
+        togglePostVisibility,
+        deletePost,
+    } = useSocial();
+    const liked = isLiked(post.id);
+    const bookmarked = isBookmarked(post.id);
+    const reshared = isReshared(post.id);
+    const isOwner = post.username === profile.username;
+
+    function getLikeCount() {
+        const match = String(post.likes).match(/^([\d.]+)(k|m)?$/i);
+        if (!match) return post.likes;
+
+        const suffix = match[2]?.toLowerCase();
+        const multiplier = suffix === "m" ? 1000000 : suffix === "k" ? 1000 : 1;
+        const count = Number(match[1]) * multiplier + (liked ? 1 : 0);
+        if (count >= 1000000) return `${(count / 1000000).toFixed(1)}m`;
+        if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
+        return String(count);
+    }
 
     return (
         <article className="post-card">
             <PostHeader
                 username={post.username}
             />
+
+            {isOwner && (
+                <div className="post-card-menu">
+                    <button
+                        type="button"
+                        aria-label="Post options"
+                        aria-expanded={menuOpen}
+                        onClick={() => setMenuOpen(!menuOpen)}
+                    >
+                        <MoreIcon />
+                    </button>
+                    {menuOpen && (
+                        <div className="post-card-menu-items">
+                            <button
+                                type="button"
+                                onClick={() => togglePostVisibility(post.id, "hidden")}
+                            >
+                                {post.hidden ? "Show on profile" : "Hide from profile"}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => togglePostVisibility(post.id, "locked")}
+                            >
+                                {post.locked ? "Unlock post" : "Lock post"}
+                            </button>
+                            <button
+                                type="button"
+                                className="delete-post-action"
+                                onClick={() => {
+                                    if (window.confirm("Delete this post? This cannot be undone.")) {
+                                        deletePost(post.id);
+                                    }
+                                    setMenuOpen(false);
+                                }}
+                            >
+                                Delete post
+                            </button>
+                        </div>
+                    )}
+                </div>
+            )}
 
             <Link
                 to={`/post/${post.id}`}
@@ -40,29 +107,31 @@ function PostCard({ post }) {
                     className={`like-button ${
                         liked ? "active" : ""
                     }`}
-                    onClick={() => setLiked(!liked)}
+                    aria-label={liked ? "Unlike post" : "Like post"}
+                    aria-pressed={liked}
+                    onClick={() => toggleLike(post.id)}
                 >
                     <LikeIcon />
-                    <span>{post.likes}</span>
+                    <span>{getLikeCount()}</span>
                 </button>
 
-                <button
-                    type="button"
-                    className={`comment-button ${
-                        commented ? "active" : ""
-                    }`}
-                    onClick={() => setCommented(!commented)}
+                <Link
+                    to={`/post/${post.id}`}
+                    className="comment-button"
+                    aria-label="View comments"
                 >
                     <CommentIcon />
                     <span>{post.comments}</span>
-                </button>
+                </Link>
 
                 <button
                     type="button"
                     className={`reshare-button ${
                         reshared ? "active" : ""
                     }`}
-                    onClick={() => setReshared(!reshared)}
+                    aria-label={reshared ? "Remove reshare" : "Reshare post"}
+                    aria-pressed={reshared}
+                    onClick={() => toggleReshare(post.id)}
                 >
                     <ReshareIcon />
                 </button>
@@ -72,9 +141,9 @@ function PostCard({ post }) {
                     className={`bookmark-button ${
                         bookmarked ? "active" : ""
                     }`}
-                    onClick={() =>
-                        setBookmarked(!bookmarked)
-                    }
+                    aria-label={bookmarked ? "Remove bookmark" : "Bookmark post"}
+                    aria-pressed={bookmarked}
+                    onClick={() => toggleBookmark(post.id)}
                 >
                     <BookmarkIcon />
                 </button>
